@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { TabsProps } from 'antd';
-import { Tabs } from 'antd';
+import { Tabs, Affix } from 'antd';
 import { history } from 'umi';
 import type { RouteContextType, MenuDataItem } from '@ant-design/pro-layout';
 import { RouteContext } from '@ant-design/pro-layout';
@@ -82,7 +82,18 @@ const MultiTabs: React.FC<{ routeContext: RouteContextType }> = (props) => {
 
   return (
     <div className="multi-tabs-container">
-      <Tabs type="editable-card" activeKey={activeKey} hideAdd onChange={onChange} onEdit={onEdit}>
+      <Tabs
+        type="editable-card"
+        activeKey={activeKey}
+        hideAdd
+        renderTabBar={(tabNavBarProps, DefaultTabBar) => (
+          <Affix offsetTop={props.routeContext.fixedHeader ? 48 : 0}>
+            <DefaultTabBar {...tabNavBarProps} />
+          </Affix>
+        )}
+        onChange={onChange}
+        onEdit={onEdit}
+      >
         {panes.map((pane) => {
           const { component: Component } = pane;
           return (
