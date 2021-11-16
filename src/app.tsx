@@ -73,7 +73,7 @@ export const request: RequestConfig = {
     // adaptor
   },
   headers: {
-    Authorization: 'Bearer 2e2f219b-1586-4304-bc09-e618e8acb34b',
+    Authorization: 'Bearer ' + localStorage.getItem('mscode_token'),
   },
   middlewares: [],
   requestInterceptors: [],
