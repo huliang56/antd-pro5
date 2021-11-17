@@ -27,7 +27,8 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
-  accessiblePaths: string[];
+  accessiblePaths?: string[];
+  fetchAccessiblePaths?: () => Promise<string[]>;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -38,31 +39,33 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  const fetchSysMenus = async (params: any) => {
+
+  const fetchAccessiblePaths = async () => {
     try {
-      const res = await getSysMenus(params);
-      return res.menu;
+      const res = await getSysMenus({ sysId: 24, username: 'admin', mobile: 13918776407 });
+      return getFlattenMenuData(res.menu).map((i) => i.path || '');
     } catch (error) {
       history.push(loginPath);
     }
-    return undefined;
+    return [];
   };
 
   // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
-    const sysMenus = await fetchSysMenus({ sysId: 24, username: 'admin', mobile: 13918776407 });
-    const accessiblePaths = getFlattenMenuData(sysMenus).map((i) => i.path || '');
+    const accessiblePaths = await fetchAccessiblePaths();
     return {
       fetchUserInfo,
       currentUser,
       settings: {},
+      fetchAccessiblePaths,
       accessiblePaths,
     };
   }
   return {
     fetchUserInfo,
     settings: {},
+    fetchAccessiblePaths,
     accessiblePaths: [],
   };
 }

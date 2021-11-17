@@ -25,7 +25,8 @@ const MultiTabs: React.FC<{ routeContext: RouteContextType }> = (props) => {
     }
 
     if (isNoLayoutPath) {
-      return currentMenu.redirect && history.replace(currentMenu.redirect || '');
+      const redirectPath = currentMenu.redirect || currentMenu.children?.[0]?.path || '';
+      return history.replace(redirectPath);
     }
 
     if (currentPath && menus?.length) {

@@ -39,10 +39,12 @@ const Login: React.FC = () => {
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
+    const accessiblePaths = await initialState?.fetchAccessiblePaths?.();
+    if (userInfo || accessiblePaths?.length) {
       await setInitialState((s) => ({
         ...s,
         currentUser: userInfo,
+        accessiblePaths,
       }));
     }
   };
